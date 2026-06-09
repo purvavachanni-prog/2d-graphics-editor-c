@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D ASCII Graphics Editor</title>
+    <!-- Import Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1 class="glow-text">2D ASCII Graphics Editor</h1>
+            <p class="subtitle">Draw vector shapes onto a character matrix in real-time</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Left Panel: Tools & Settings -->
+            <section class="panel left-panel">
+                <h2>Drawing Tools</h2>
+                <div class="tool-grid">
+                    <button class="tool-btn active" data-tool="line" id="tool-line">
+                        <span class="icon">╱</span> Line
+                    </button>
+                    <button class="tool-btn" data-tool="rect" id="tool-rect">
+                        <span class="icon">⬜</span> Rectangle
+                    </button>
+                    <button class="tool-btn" data-tool="circle" id="tool-circle">
+                        <span class="icon">◯</span> Circle
+                    </button>
+                    <button class="tool-btn" data-tool="triangle" id="tool-triangle">
+                        <span class="icon">▲</span> Triangle
+                    </button>
+                </div>
+
+                <!-- Dynamic Help/Action Info based on selected tool -->
+                <div class="info-card" id="tool-instructions">
+                    <h3>How to draw a Line:</h3>
+                    <p>1. Click any cell on the grid to set the <strong>Start Point</strong>.</p>
+                    <p>2. Hover over the grid to see a live preview.</p>
+                    <p>3. Click another cell to set the <strong>End Point</strong> and finalize the line.</p>
+                </div>
+
+                <!-- Manual Input/Edit Form (Collapsible/Hidden by default, shown when modifying) -->
+                <div class="edit-panel" id="edit-panel" style="display: none;">
+                    <h3>Modify Shape <span id="edit-shape-id">#1</span></h3>
+                    <form id="edit-form">
+                        <input type="hidden" id="edit-id-input">
+                        <div id="edit-inputs-container">
+                            <!-- Injected dynamically based on shape type -->
+                        </div>
+                        <div class="edit-actions">
+                            <button type="button" class="btn btn-save" id="btn-save-edit">Apply Changes</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-edit">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions-group">
+                    <button class="btn btn-primary" id="btn-export">Export to ASCII Text</button>
+                    <button class="btn btn-danger" id="btn-clear">Clear All Shapes</button>
+                </div>
+            </section>
+
+            <!-- Center Panel: The Grid Canvas -->
+            <section class="canvas-panel">
+                <div class="canvas-header">
+                    <span class="coord-indicator" id="cursor-coords">Hover over grid...</span>
+                    <span class="canvas-dimensions">60 × 20 Grid</span>
+                </div>
+                
+                <!-- Grid Container (populated via app.js) -->
+                <div class="grid-container-wrapper">
+                    <div class="grid-canvas" id="pixel-grid"></div>
+                </div>
+
+                <!-- Legend -->
+                <div class="legend">
+                    <div class="legend-item"><span class="dot empty"></span> Empty pixel (_)</div>
+                    <div class="legend-item"><span class="dot filled"></span> Active shape pixel (*)</div>
+                    <div class="legend-item"><span class="dot preview"></span> Live shape preview</div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Shape Inspector -->
+            <section class="panel right-panel">
+                <h2>Active Shapes</h2>
+                <div class="shapes-list-wrapper">
+                    <ul class="shapes-list" id="shapes-list">
+                        <!-- List items added dynamically -->
+                        <li class="empty-list-msg">No shapes created yet. Click on the canvas grid to start drawing!</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for exporting ASCII art -->
+    <div class="modal-overlay" id="export-modal" style="display: none;">
+        <div class="modal-content">
+            <h3>ASCII Canvas Export</h3>
+            <p>Copy the raw text below to use in your terminal or files:</p>
+            <pre class="export-preview" id="export-text"></pre>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="btn-copy-export">Copy to Clipboard</button>
+                <button class="btn btn-cancel" id="btn-close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
